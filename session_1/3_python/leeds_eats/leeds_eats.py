@@ -5,19 +5,41 @@ import sqlite3
 # ==================================================
 
 def total_customers(conn):
-    pass
+    query = '''
+    Select count(customer_id) from customers;     
+'''
+    cursor = conn.execute(query)
+    for row in cursor:
+        print(f"Total number of customers: {row[0]}")
 
 
 def customer_signup_range(conn):
-    pass
+    query = '''
+    Select min(signup_date), max(signup_date) from customers;     
+'''
+    cursor = conn.execute(query)
+    for row in cursor:
+        print(f"Customer signup date range: {row[0]} to {row[1]}")
 
 
 def order_summary_stats(conn):
-    pass
-
-
+    query = '''
+    Select sum(order_id), avg(order_total), max(order_total), min(order_total) from orders;
+'''
+    cursor = conn.execute(query)
+    print("Total number of orders: "+ cursor[0])
+    print("Average price of order: "+ cursor[1])
+    print("Highest order value: "+ cursor[2])
+    print("Minimum order value: "+ cursor[3])
 def driver_summary(conn):
-    pass
+    query = '''
+    Select count(driver_id), min(hire_date), max(hire_date) from drivers;     
+'''
+    cursor = conn.execute(query)
+    for row in cursor:
+        print(f"Total number of drivers: {row[0]}")
+        print(f"Earliest hire date: {row[1]}")
+        print(f"Latest hire date: {row[2]}")    
 
 
 # ==================================================
@@ -196,7 +218,7 @@ def main_menu(conn):
         else:
             print("Invalid option. Please try again.")
 
-def get_connection(db_path="food_delivery.db"):
+def get_connection(db_path="session_1/3_python/leeds_eats/food_delivery.db"):
     """
     Establish a connection to the SQLite database.
     Returns a connection object.

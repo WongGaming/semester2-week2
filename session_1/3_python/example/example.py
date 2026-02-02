@@ -1,6 +1,6 @@
 import sqlite3
 
-def get_connection(db_path="university.db"):
+def get_connection(db_path="session_1/3_python/example/university.db"):
     """
     Establish a connection to the SQLite database.
     Returns a connection object.

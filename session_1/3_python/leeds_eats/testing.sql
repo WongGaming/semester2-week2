@@ -9,3 +9,4 @@
 
 
 -- You can use this to test your sql before you write it into your program.
+Select count(customer_id) from customers; 
