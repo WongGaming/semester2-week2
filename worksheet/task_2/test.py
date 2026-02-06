@@ -21,7 +21,7 @@ except ImportError as e:
     print("Import error:", e)
     sys.exit(1)
 
-DB_PATH = "tickets.db"
+DB_PATH = "worksheet/task_2/tickets.db"
 
 # This is just a function to print out your results nicely.
 def print_rows(headers, rows, max_rows=50):

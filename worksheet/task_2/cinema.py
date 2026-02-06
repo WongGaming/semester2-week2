@@ -18,7 +18,14 @@ def customer_tickets(conn, customer_id):
     Include only tickets purchased by the given customer_id.
     Order results by film title alphabetically.
     """
-    pass
+    query = '''
+            Select films.title, screenings.screen, tickets.price from films, screenings, tickets, customers
+            Where customers.customer_id = ? and tickets.customer_id = customers.customer_id and screenings.screening_id = tickets.screening_id and films.film_id = screenings.film_id
+            Order By films.title Asc;
+            '''
+    cursor = conn.execute(query, (customer_id,))
+    return cursor.fetchall()
+    
 
 
 def screening_sales(conn):
@@ -29,7 +36,16 @@ def screening_sales(conn):
     Include all screenings, even if tickets_sold is 0.
     Order results by tickets_sold descending.
     """
-    pass
+    query = '''
+            Select screenings.screening_id, films.title, count(tickets.ticket_id) from films, screenings
+            Left Join tickets on tickets.screening_id = screenings.screening_id
+            LEFT JOIN customers ON customers.customer_id = tickets.customer_id
+            Where customers.customer_id = tickets.customer_id and films.film_id = screenings.film_id
+            Group By screenings.screening_id
+            Order by count(tickets.ticket_id) Desc, screenings.screening_id asc;
+            '''
+    cursor = conn.execute(query)
+    return cursor.fetchall()
 
 
 def top_customers_by_spend(conn, limit):
@@ -42,4 +58,13 @@ def top_customers_by_spend(conn, limit):
     Order by total_spent descending.
     Limit the number of rows returned to `limit`.
     """
-    pass
+    query = '''
+            Select customers.customer_name, sum(tickets.price) from customers
+            Join tickets on tickets.customer_id = customers.customer_id
+            Group By customers.customer_id
+            Having sum(tickets.price) > 0
+            Order By sum(tickets.price) desc
+            limit ?
+            '''
+    cursor = conn.execute(query, (limit,))
+    return cursor.fetchall()
