@@ -37,10 +37,10 @@ def screening_sales(conn):
     Order results by tickets_sold descending.
     """
     query = '''
-            Select screenings.screening_id, films.title, count(tickets.ticket_id) from films, screenings
+            Select screenings.screening_id, films.title, count(tickets.ticket_id) from screenings
+            Join films on films.film_id = screenings.film_id
             Left Join tickets on tickets.screening_id = screenings.screening_id
             LEFT JOIN customers ON customers.customer_id = tickets.customer_id
-            Where customers.customer_id = tickets.customer_id and films.film_id = screenings.film_id
             Group By screenings.screening_id
             Order by count(tickets.ticket_id) Desc, screenings.screening_id asc;
             '''
